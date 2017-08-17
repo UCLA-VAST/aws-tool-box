@@ -28,10 +28,10 @@ class AGFIManager():
         
         allAFIParse = json.loads(allAFIs)
         
-        print 'Found {} AGFIs.'.format(len(allAFIParse['FpgaImages']))
+        print 'Found {0} AGFIs.'.format(len(allAFIParse['FpgaImages']))
         
         allAFISorted = sorted(allAFIParse['FpgaImages'], key=lambda dct: dct['UpdateTime'])
-        AFITableFormat = '{:20s}|{:20s}|{:12s}|{:12s}|{:20s}'
+        AFITableFormat = '{0:22s}|{1:20s}|{2:12s}|{3:12s}|{4:20s}'
         print AFITableFormat.format('AGFI', 'UpdateTime', 'ShellVersion', 'State', 'Name')
         
         for afi in allAFISorted:
@@ -43,7 +43,7 @@ class AGFIManager():
              else:
                  print AFITableFormat.format(afi['FpgaImageGlobalId'], afiDatetimeStr, afi['ShellVersion'], afiState['Code'], afi['Name'])
         
-        print '\nTotal AGFIs: {}'.format(len(allAFIParse['FpgaImages']))
+        print '\nTotal AGFIs: {0}'.format(len(allAFIParse['FpgaImages']))
 
 #main function
 def main():
