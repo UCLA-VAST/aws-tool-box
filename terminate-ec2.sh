@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Show states of all instances
-python instance-manage.py
+python instance-states.py
 
 # Read instance ID from user
 read -p "Enter the instance ID: " id
