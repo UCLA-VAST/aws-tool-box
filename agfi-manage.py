@@ -22,26 +22,32 @@ import dateutil.parser
 class AGFIManager():
     version = 'v0.0.1'
     def showAFI(self): 
-        command = ['aws', 'ec2', 'describe-fpga-images', '--owners', 'self']
-        p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        command = ['aws', 'ec2', 'describe-fpga-images']
+        p = subprocess.Popen(command, stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
         allAFIs = p.stdout.read()
-        
         allAFIParse = json.loads(allAFIs)
         
         print 'Found {0} AGFIs.'.format(len(allAFIParse['FpgaImages']))
         
-        allAFISorted = sorted(allAFIParse['FpgaImages'], key=lambda dct: dct['UpdateTime'])
+        allAFISorted = sorted(allAFIParse['FpgaImages'],
+                key=lambda dct: dct['UpdateTime'])
         AFITableFormat = '{0:22s}|{1:20s}|{2:12s}|{3:12s}|{4:20s}'
-        print AFITableFormat.format('AGFI', 'UpdateTime', 'ShellVersion', 'State', 'Name')
+        print AFITableFormat.format('AGFI', 'UpdateTime', 'ShellVersion',
+                'State', 'Name')
         
         for afi in allAFISorted:
              afiState = afi['State']
              afiDatetime = dateutil.parser.parse(afi['UpdateTime'])
              afiDatetimeStr = afiDatetime.strftime("%Y-%m-%d %H:%M:%S")
              if afiState['Code'] == 'pending':
-                 print AFITableFormat.format(afi['FpgaImageGlobalId'], afiDatetimeStr, 'pending', afiState['Code'], afi['Name'])
+                 print (AFITableFormat.format(afi['FpgaImageGlobalId'],
+                         afiDatetimeStr, 'pending', afiState['Code'],
+                         afi['Name']))
              else:
-                 print AFITableFormat.format(afi['FpgaImageGlobalId'], afiDatetimeStr, afi['ShellVersion'], afiState['Code'], afi['Name'])
+                 print (AFITableFormat.format(afi['FpgaImageGlobalId'],
+                     afiDatetimeStr, afi['ShellVersion'], afiState['Code'],
+                     afi['Name']))
         
         print '\nTotal AGFIs: {0}'.format(len(allAFIParse['FpgaImages']))
 
