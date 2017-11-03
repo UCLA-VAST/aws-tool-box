@@ -40,3 +40,12 @@ Check the states of all active instances.
 python instance-states.py [key-name]
 key-name (optional): Same as launch-ec2.sh
 ```
+
+# agfi-manage.py
+List all active AFIs.
+
+## Usage
+```
+python agfi-manage.py
+```
+
