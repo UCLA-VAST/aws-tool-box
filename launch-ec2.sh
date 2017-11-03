@@ -13,26 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-
-if [ $# -lt 4 ]; then
-    echo "Usage: ${BASH_SOURCE[0]} instance-type instance-name ami-id key-name"
+if [ $# -lt 1 ]; then
+    echo "Usage: ${BASH_SOURCE[0]} key-name [instance-type=f1.2xlarge]"
     exit 1
 fi
 
-instance_type=$1
-instance_name=$2
-image_id=$3
-key_name=$4
+key_name=$1
+instance_type=${2:-"f1.2xlarge"}
 
 username=centos
 
 instance_json=`aws ec2 run-instances \
         --count 1 \
-        --image-id $image_id \
+        --image-id ami-626e9918 \
         --instance-type $instance_type \
         --key-name $key_name \
-        --security-groups default` 
+        --security-groups FPGA-DEV-AMI-1-3-3`
 
 if [ $? -ne 0 ]; then
     >&2 echo "Error: Failed to launch instance"
@@ -49,7 +45,7 @@ fi;
 ip=`aws ec2 describe-instances --instance-ids $instance_id \
     | jq -r .Reservations[].Instances[].PrivateIpAddress`;
 
-aws ec2 create-tags --resources $instance_id --tags "Key=Name,Value=$instance_name"
+echo "$instance_type instance with AMI $instance_id has been created."
 
 # wait for instance to init
 ping -c 1 $ip > /dev/null;
@@ -61,7 +57,6 @@ while [ $ret -ne 0 ]; do
     ret=$?
 done;
 
-echo "$instance_type instance with AMI $instance_id has been created."
-echo "Run the command below to ssh to the instance"
+echo "Initialized. Run the command below to ssh to the instance:"
 echo "ssh -i $key_name.pem centos@$ip"
 
