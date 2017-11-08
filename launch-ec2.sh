@@ -43,7 +43,7 @@ if [ $? -ne 0 ]; then
 fi;
 
 ip=`aws ec2 describe-instances --instance-ids $instance_id \
-    | jq -r .Reservations[].Instances[].PrivateIpAddress`;
+    | jq -r .Reservations[].Instances[].PublicIpAddress`;
 
 echo "$instance_type instance with AMI $instance_id has been created."
 

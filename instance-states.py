@@ -22,7 +22,7 @@ data = p.stdout.read()
 
 instanceData = (json.loads(data))['Reservations']
 
-tableFormat = '{0:10s}|{1:19s}|{2:15s}|{3:19s}|{4:10s}'
+tableFormat = '{0:15s}|{1:19s}|{2:15s}|{3:19s}|{4:10s}'
 print tableFormat.format('KeyName', 'InstanceId', 'PublicIpAddress',
         'LaunchTime', 'State')
 
